@@ -23,6 +23,12 @@
             android:label="TravelPartner
 ">
         </activity>
+        <activity android:name=".FavMain"
+            android:label="TravelPartner">
+        </activity>
+        <activity android:name=".AboutUs"
+            android:label="TravelPartner">
+        </activity>
 
     </application>
 </manifest>

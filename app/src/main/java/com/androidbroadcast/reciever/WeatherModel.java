@@ -1,8 +1,5 @@
 package com.androidbroadcast.reciever;
 
-/**
- * Created by Shish on 4/10/2019.
- */
 
 public class WeatherModel {
     private String description;

@@ -15,22 +15,21 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
-
-/**
- * Created by Shish on 4/9/2019.
- */
 
 public class PlaceDetail extends Activity {
     ImageView image;
@@ -115,6 +114,39 @@ public class PlaceDetail extends Activity {
 
             }
         });
+
+        try
+        {
+            TextView name = (TextView) findViewById(R.id.nameView);
+            String Place_Name = (String)name.getText();
+            DataController DC = new DataController(getBaseContext());
+            DC.open();
+            String Notes = DC.getNotes(Place_Name);
+            EditText notes = (EditText) findViewById(R.id.notes);
+            notes.setText(Notes);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        try
+        {
+            Button favButton = (Button) findViewById(R.id.favButton);
+            TextView name = (TextView) findViewById(R.id.nameView);
+            String Place_Name = (String)name.getText();
+            DataController DC = new DataController(getBaseContext());
+            DC.open();
+            boolean checkFav = DC.checkFav(Place_Name);
+            if(checkFav == true)
+                favButton.setBackgroundResource(R.drawable.fav_filled);
+            else
+                favButton.setBackgroundResource(R.drawable.fav);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
 
@@ -210,5 +242,99 @@ public class PlaceDetail extends Activity {
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
+    public void addNotes(View view)
+    {
+        TextView name = (TextView) findViewById(R.id.nameView);
+        String Place_Name = (String)name.getText();
+        EditText notes = (EditText) findViewById(R.id.notes);
+        String Place_Notes = notes.getText().toString();
+        DataController DC = new DataController(getBaseContext());
+        DC.open();
+        Log.d("PlaceName:",Place_Name);
+        Log.d("PlaceNotes:",Place_Notes);
+        DC.addNotes(Place_Name, Place_Notes);
+        Toast.makeText(getApplicationContext(),"Notes Added Successfully", Toast.LENGTH_SHORT).show();
+    }
+
+    public void clearNotes(View view)
+    {
+        EditText notes = (EditText) findViewById(R.id.notes);
+        notes.setText("");
+    }
+
+    public void favClicked(View view)
+    {
+        try
+        {
+            TextView name = (TextView) findViewById(R.id.nameView);
+            String Place_Name = (String)name.getText();
+            DataController DC = new DataController(getBaseContext());
+            DC.open();
+            boolean checkFav = DC.checkFav(Place_Name);
+            if(checkFav == true)
+                removeFav();
+            else
+                addFav();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void addFav()
+    {
+        final Bundle extras = getIntent().getExtras();
+        String placeId = extras.getString("placeId");
+        String photoReferenceId = extras.getString("photoReferenceId");
+        String name = extras.getString("name");
+        String location = extras.getString("location");
+        String rating = extras.getString("rating");
+        String category = extras.getString("category");
+        String openNow = extras.getString("openNow");
+        String lat = extras.getString("lat");
+        String lon = extras.getString("lon");
+        DataController DC = new DataController(getBaseContext());
+        DC.open();
+        DC.addFav(placeId, photoReferenceId, name, location, rating, category, openNow, lat, lon);
+        finish();
+        startActivity(getIntent());
+        Toast.makeText(getApplicationContext(),"Place Added to your Favourites", Toast.LENGTH_SHORT).show();
+    }
+
+    public void removeFav()
+    {
+        final Bundle extras = getIntent().getExtras();
+        String place_name = extras.getString("name");
+        DataController DC = new DataController(getBaseContext());
+        DC.open();
+        boolean answer = DC.removeFav(place_name);
+        finish();
+        startActivity(getIntent());
+        Toast.makeText(getApplicationContext(),"Place Removed from your Favourites", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
+        case R.id.menu_about:
+            //add the function to perform here
+            Intent l1= new Intent(PlaceDetail.this,AboutUs.class);
+            startActivity(l1);
+            return(true);
+        case R.id.menu_logout:
+            //add the function to perform here
+            Intent l2= new Intent(PlaceDetail.this,SignInActivity.class);
+            startActivity(l2);
+            return(true);
+    }
+        return(super.onOptionsItemSelected(item));
+    }
 
 }

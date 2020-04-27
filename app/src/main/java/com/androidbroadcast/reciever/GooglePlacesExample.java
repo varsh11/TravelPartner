@@ -15,6 +15,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,9 +26,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * Created by Shish on 4/8/2019.
- */
 
 public class GooglePlacesExample extends ListActivity {
         ArrayList<GooglePlace> venuesList;
@@ -65,7 +64,6 @@ public class GooglePlacesExample extends ListActivity {
 
 
             ListView lv = getListView();
-            //Log.d("ListView", "onCreate: "+lv.get);
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> adapter, View v, int position,
                                         long arg3)
@@ -100,7 +98,6 @@ public class GooglePlacesExample extends ListActivity {
 
                     }
                 }).execute();
-
             }
 
         private class googleplaces extends AsyncTask<View, Void, ArrayList> {
@@ -109,7 +106,7 @@ public class GooglePlacesExample extends ListActivity {
             public AsyncResponse delegate = null;
 
             public googleplaces(AsyncResponse asyncResponse) {
-                delegate = asyncResponse;//Assigning call back interfacethrough constructor
+                delegate = asyncResponse;//Assigning call back interface through constructor
             }
 
 
@@ -135,10 +132,10 @@ public class GooglePlacesExample extends ListActivity {
                if (temp == null) {
                    /*TextView msg=(TextView)findViewById(R.);
                    msg.setTextSize(30);
-                   msg.setText("No serach result available");
+                   msg.setText("No search result available");
                    */ // we have an error to the call
                     // we can also stop the progress bar
-                   Toast.makeText(getApplicationContext(), "No serach result available", Toast.LENGTH_SHORT).show();
+                   Toast.makeText(getApplicationContext(), "No search result available", Toast.LENGTH_SHORT).show();
                 } else {
                     // all things went right
 
@@ -193,6 +190,17 @@ public class GooglePlacesExample extends ListActivity {
         }
     }
 
+    public void listClicked(View view)
+    {
+        Toast.makeText(getApplicationContext(),"Currently Viewing HomePage", Toast.LENGTH_SHORT).show();
+    }
+
+    public void favClicked(View view)
+    {
+        Intent launchActivity1= new Intent(GooglePlacesExample.this,FavMain.class);
+        startActivity(launchActivity1);
+    }
+
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -211,6 +219,29 @@ public class GooglePlacesExample extends ListActivity {
 
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
+        case R.id.menu_about:
+            //add the function to perform here
+            Intent l1= new Intent(GooglePlacesExample.this,AboutUs.class);
+            startActivity(l1);
+            return(true);
+        case R.id.menu_logout:
+            //add the function to perform here
+            Intent l2= new Intent(GooglePlacesExample.this,SignInActivity.class);
+            startActivity(l2);
+            return(true);
+    }
+        return(super.onOptionsItemSelected(item));
     }
 
 }

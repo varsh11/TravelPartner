@@ -32,7 +32,6 @@ public class SignUp extends Activity {
 
     public void saveLogin(View view) {
         Log.d("Clicked", "signUp: ");
-        String regex="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$";
         EditText newEmail = (EditText) findViewById(R.id.emailView);
         EditText pwd = (EditText) findViewById(R.id.passwordView);
         EditText firstName = (EditText) findViewById(R.id.firstNameView);
@@ -45,45 +44,95 @@ public class SignUp extends Activity {
         String nameEdit = firstName.getText().toString()+ lastName.getText().toString();
         Log.d("details", "saveLogin: " + email + pwdEdit);
 
-        if (!cpwd.getText().toString().equals(pwd.getText().toString())) {
-            //msg.setText("Password does not match");
-            Toast.makeText(getApplicationContext(), "Password does not match", Toast.LENGTH_LONG).show();
+        if(cpwd.getText().length()>0 && firstName.getText().length()>0 && lastName.getText().length()>0 && pwd.getText().length()>0 && newEmail.getText().length()>0)
+        {
+            if(isValidEmail(newEmail.getText().toString()))
+            {
+                if(pwd.getText().toString().length() >= 8)
+                {
+                    if (checkPass(pwd.getText().toString()))
+                    {
+                        if(cpwd.getText().toString().equals(pwd.getText().toString()))
+                        {
+                            DataController dataController = new DataController(getBaseContext());
+                            dataController.open();
+                            Cursor rs = dataController.retrieve(email);
+                            if(!rs.moveToFirst()){
+                                long retValue = dataController.insert(nameEdit, email, pwdEdit);
+                                dataController.close();
+                                Log.d("checking..", "saveLogin: " + retValue + msg.getText());
+                                if (retValue != -1) {
+                                    Context context = getApplicationContext();
+                                    //msg.setText("Registered successfully");
+                                    Toast.makeText(getApplicationContext(), "Registered successfully", Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(SignUp.this, GooglePlacesExample.class);
+                                    startActivity(intent);
+                                    //Log.d("checing..", "saveLogin: " + retValue + msg.getText());
 
+                                }
+                            }
+                            else
+                                {
+                                Toast.makeText(getApplicationContext(), "User already registered.Please Sign In", Toast.LENGTH_LONG).show();
+                                Intent i = new Intent(SignUp.this,SignInActivity.class);
+                                startActivity(i);
+                            }
+                        }
+                        else
+                        {
+                            Toast.makeText(getApplicationContext(), "Password Does Not Match", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(), "Password Must Have One Capital Letter, Lower Letter and Number.", Toast.LENGTH_LONG).show();
+                    }
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Password CANNOT be Smaller than 8 Digits.", Toast.LENGTH_LONG).show();
+                }
+            }
+            else
+            {
+                Toast.makeText(getApplicationContext(), "Please Enter Valid E-Mail", Toast.LENGTH_LONG).show();
+            }
         }
-        if (cpwd.getText().length()>0 && firstName.getText().length()>0 && lastName.getText().length()>0 && pwd.getText().length()>0 && newEmail.getText().length()>0) {
-           // if(email.matches("")){
-            DataController dataController = new DataController(getBaseContext());
-            dataController.open();
-            Cursor rs = dataController.retrieve(email);
-            if(!rs.moveToFirst()){
-            long retValue = dataController.insert(nameEdit, email, pwdEdit);
-            dataController.close();
-            Log.d("checking..", "saveLogin: " + retValue + msg.getText());
-            if (retValue != -1) {
-                Context context = getApplicationContext();
-                //msg.setText("Registered successfully");
-                Toast.makeText(getApplicationContext(), "Registered successfully", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(SignUp.this, GooglePlacesExample.class);
-                startActivity(intent);
-                //Log.d("checing..", "saveLogin: " + retValue + msg.getText());
-
-            }
-        }else {
-                Toast.makeText(getApplicationContext(), "User already registered.Please Sign In", Toast.LENGTH_LONG).show();
-                Intent i = new Intent(SignUp.this,SignInActivity.class);
-                startActivity(i);
-            }
-        }else{
-                Toast.makeText(getApplicationContext(), "Please enter all fields", Toast.LENGTH_LONG).show();
-        }/*} else {
-           // msg.setText("Please enter all fields");
-            Toast.makeText(getApplicationContext(), "Please enter all fields", Toast.LENGTH_LONG).show();
-        }*/
+        else
+        {
+            Toast.makeText(getApplicationContext(), "Please Enter all Fields", Toast.LENGTH_LONG).show();
+        }
     }
     @Override
     protected void onStop() {
         super.onStop();
         SignUp.this.finish();
+    }
+
+    private static boolean checkPass(String str) {
+        char ch;
+        boolean capitalFlag = false;
+        boolean lowerCaseFlag = false;
+        boolean numberFlag = false;
+        for(int i=0;i < str.length();i++) {
+            ch = str.charAt(i);
+            if( Character.isDigit(ch)) {
+                numberFlag = true;
+            }
+            else if (Character.isUpperCase(ch)) {
+                capitalFlag = true;
+            } else if (Character.isLowerCase(ch)) {
+                lowerCaseFlag = true;
+            }
+            if(numberFlag && capitalFlag && lowerCaseFlag)
+                return true;
+        }
+        return false;
+    }
+
+    static boolean isValidEmail(String email) {
+        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+        return email.matches(regex);
     }
 }
 

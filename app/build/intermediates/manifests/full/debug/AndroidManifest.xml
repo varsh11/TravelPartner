@@ -36,6 +36,14 @@
             android:name="com.androidbroadcast.reciever.SignUp"
             android:label="TravelPartner " >
         </activity>
+        <activity
+            android:name="com.androidbroadcast.reciever.FavMain"
+            android:label="TravelPartner" >
+        </activity>
+        <activity
+            android:name="com.androidbroadcast.reciever.AboutUs"
+            android:label="TravelPartner" >
+        </activity>
     </application>
 
 </manifest>

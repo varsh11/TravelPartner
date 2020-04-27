@@ -19,10 +19,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * Created by Shish on 4/8/2019.
- */
-
 public class Util {
     public static String makeCall(String url) {
 

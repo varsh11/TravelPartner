@@ -3,9 +3,6 @@ package com.androidbroadcast.reciever;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Shish on 4/8/2019.
- */
 
 public class GooglePlace {
     private String name;

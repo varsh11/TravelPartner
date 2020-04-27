@@ -14,9 +14,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * Created by Shish on 4/11/2019.
- */
 
 public class MyAdapter extends ArrayAdapter<GooglePlace> {
 

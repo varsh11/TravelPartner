@@ -6,10 +6,10 @@ public class WeatherModel {
     private String temperature;
     private String wind;
 
-    public WeatherModel(){
-        this.description="";
-        this.temperature="";
-        this.wind="";
+    public WeatherModel() {
+        this.description = "";
+        this.temperature = "";
+        this.wind = "";
     }
 
     public String getDescription() {

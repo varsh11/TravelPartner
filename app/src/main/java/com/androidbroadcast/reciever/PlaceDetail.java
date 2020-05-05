@@ -1,24 +1,15 @@
 package com.androidbroadcast.reciever;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.drm.DrmStore;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -26,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
@@ -115,36 +105,30 @@ public class PlaceDetail extends Activity {
             }
         });
 
-        try
-        {
+        try {
             TextView name = (TextView) findViewById(R.id.nameView);
-            String Place_Name = (String)name.getText();
+            String Place_Name = (String) name.getText();
             DataController DC = new DataController(getBaseContext());
             DC.open();
             String Notes = DC.getNotes(Place_Name);
             EditText notes = (EditText) findViewById(R.id.notes);
             notes.setText(Notes);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try
-        {
+        try {
             Button favButton = (Button) findViewById(R.id.favButton);
             TextView name = (TextView) findViewById(R.id.nameView);
-            String Place_Name = (String)name.getText();
+            String Place_Name = (String) name.getText();
             DataController DC = new DataController(getBaseContext());
             DC.open();
             boolean checkFav = DC.checkFav(Place_Name);
-            if(checkFav == true)
+            if (checkFav == true)
                 favButton.setBackgroundResource(R.drawable.fav_filled);
             else
                 favButton.setBackgroundResource(R.drawable.fav);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -217,7 +201,6 @@ public class PlaceDetail extends Activity {
             } else {
 
 
-
                 //Log.d("temp+2", "doInBackground: " + temp.toString());
                 venuesList = (ArrayList<WeatherModel>) Util.parseWeather(temp);
                 //Log.d("Temp output", "onPostExecute: " + temp);
@@ -238,52 +221,45 @@ public class PlaceDetail extends Activity {
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Tourist Place");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, name.getText());
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Name : "+extras.getString("name")+"\n"+"https://maps.google.com/?q="+ Float.parseFloat(extras.getString("lat")) + "," + Float.parseFloat(extras.getString("lon")));
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Name : " + extras.getString("name") + "\n" + "https://maps.google.com/?q=" + Float.parseFloat(extras.getString("lat")) + "," + Float.parseFloat(extras.getString("lon")));
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
-    public void addNotes(View view)
-    {
+    public void addNotes(View view) {
         TextView name = (TextView) findViewById(R.id.nameView);
-        String Place_Name = (String)name.getText();
+        String Place_Name = (String) name.getText();
         EditText notes = (EditText) findViewById(R.id.notes);
         String Place_Notes = notes.getText().toString();
         DataController DC = new DataController(getBaseContext());
         DC.open();
-        Log.d("PlaceName:",Place_Name);
-        Log.d("PlaceNotes:",Place_Notes);
+        Log.d("PlaceName:", Place_Name);
+        Log.d("PlaceNotes:", Place_Notes);
         DC.addNotes(Place_Name, Place_Notes);
-        Toast.makeText(getApplicationContext(),"Notes Added Successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Notes Added Successfully", Toast.LENGTH_SHORT).show();
     }
 
-    public void clearNotes(View view)
-    {
+    public void clearNotes(View view) {
         EditText notes = (EditText) findViewById(R.id.notes);
         notes.setText("");
     }
 
-    public void favClicked(View view)
-    {
-        try
-        {
+    public void favClicked(View view) {
+        try {
             TextView name = (TextView) findViewById(R.id.nameView);
-            String Place_Name = (String)name.getText();
+            String Place_Name = (String) name.getText();
             DataController DC = new DataController(getBaseContext());
             DC.open();
             boolean checkFav = DC.checkFav(Place_Name);
-            if(checkFav == true)
+            if (checkFav == true)
                 removeFav();
             else
                 addFav();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void addFav()
-    {
+    public void addFav() {
         final Bundle extras = getIntent().getExtras();
         String placeId = extras.getString("placeId");
         String photoReferenceId = extras.getString("photoReferenceId");
@@ -299,11 +275,10 @@ public class PlaceDetail extends Activity {
         DC.addFav(placeId, photoReferenceId, name, location, rating, category, openNow, lat, lon);
         finish();
         startActivity(getIntent());
-        Toast.makeText(getApplicationContext(),"Place Added to your Favourites", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Place Added to your Favourites", Toast.LENGTH_SHORT).show();
     }
 
-    public void removeFav()
-    {
+    public void removeFav() {
         final Bundle extras = getIntent().getExtras();
         String place_name = extras.getString("name");
         DataController DC = new DataController(getBaseContext());
@@ -311,7 +286,7 @@ public class PlaceDetail extends Activity {
         boolean answer = DC.removeFav(place_name);
         finish();
         startActivity(getIntent());
-        Toast.makeText(getApplicationContext(),"Place Removed from your Favourites", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Place Removed from your Favourites", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -322,19 +297,20 @@ public class PlaceDetail extends Activity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) { switch(item.getItemId()) {
-        case R.id.menu_about:
-            //add the function to perform here
-            Intent l1= new Intent(PlaceDetail.this,AboutUs.class);
-            startActivity(l1);
-            return(true);
-        case R.id.menu_logout:
-            //add the function to perform here
-            Intent l2= new Intent(PlaceDetail.this,SignInActivity.class);
-            startActivity(l2);
-            return(true);
-    }
-        return(super.onOptionsItemSelected(item));
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_about:
+                //add the function to perform here
+                Intent l1 = new Intent(PlaceDetail.this, AboutUs.class);
+                startActivity(l1);
+                return (true);
+            case R.id.menu_logout:
+                //add the function to perform here
+                Intent l2 = new Intent(PlaceDetail.this, SignInActivity.class);
+                startActivity(l2);
+                return (true);
+        }
+        return (super.onOptionsItemSelected(item));
     }
 
 }

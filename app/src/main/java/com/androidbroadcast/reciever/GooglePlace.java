@@ -1,9 +1,5 @@
 package com.androidbroadcast.reciever;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-
 public class GooglePlace {
     private String name;
     private String category;
@@ -18,14 +14,14 @@ public class GooglePlace {
 
     public GooglePlace() {
         this.name = "";
-    this.formatted_address = "";
+        this.formatted_address = "";
         this.rating = "";
-        this.photoRefId="";
+        this.photoRefId = "";
         this.open = "";
         this.setCategory("");
         this.placeId = "";
         this.longitude = "";
-        this.latitude="";
+        this.latitude = "";
     }
 
     public String getLongitude() {

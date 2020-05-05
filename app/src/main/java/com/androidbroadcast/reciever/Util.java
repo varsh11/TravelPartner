@@ -8,7 +8,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.entity.BufferedHttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
@@ -145,7 +144,7 @@ public class Util {
                             } else {
                                 char[] chrs = poi.getCategory().toCharArray();
                                 char[] array2 = Arrays.copyOfRange(chrs, 0, chrs.length - 2);
-                                poi.setCategory("Category : "+String.valueOf(array2));
+                                poi.setCategory("Category : " + String.valueOf(array2));
                             }
                         }
                         if (jsonArray.getJSONObject(i).has("photos")) {

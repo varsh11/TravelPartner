@@ -89,5 +89,8 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\varsh\OneDrive - University of Texas at Arlington\Sem4\SE1\TravelPartner\app\libs\activation.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\varsh\OneDrive - University of Texas at Arlington\Sem4\SE1\TravelPartner\app\libs\additionnal.jar:unspecified@jar" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\varsh\OneDrive - University of Texas at Arlington\Sem4\SE1\TravelPartner\app\libs\mail.jar:unspecified@jar" level="project" />
   </component>
 </module>
